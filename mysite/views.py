@@ -12,17 +12,21 @@ from django.template.loader import render_to_string
 # """
 
 
-def home_view(request):
+def home_view(request, *args, **kwargs):
     """
     Take in a request (Django sends a request)
     Return HTML as a response
     """
 
+
     article_obj = Article.objects.get(id=1)
     # article_title = article_obj.title
     # article_content = article_obj.content
+    article_list = Article.objects.all()
+    article_queryset = article_list
 
     context = {
+        "object_list": article_queryset,
         "object": article_obj,
         "title": article_obj.title,
         "id": article_obj.id,
