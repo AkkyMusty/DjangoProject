@@ -1,6 +1,8 @@
 from django.shortcuts import render
+from django.contrib.auth.decorators import login_required
 
 from .models import Article
+from .forms import ArticleForm
 
 # Create your views here.
 
@@ -23,12 +25,19 @@ def article_search_view(request):
     }
     return render(request,"articles/search.html", context=context)
 
+@login_required
 def article_create_view(request):
     # print(request.POST)
-    context = {}
+    form = ArticleForm()
+    print(dir(form))
+    context = {
+        "form": form
+    }
     if request.method == "POST":
-        title = request.POST.get('title')
-        content = request.POST.get('content')
+        form = ArticleForm(request.POST)
+        if form.is_valid():
+            title = form.cleaned_data.get('title')
+            content = form.cleaned_data.get('content')
         # print(title, content)
         article_object = Article.objects.create(title=title, content=content)
         context["object"] = article_object
