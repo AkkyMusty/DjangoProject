@@ -6,13 +6,15 @@
     <div style="margin-top:30px">
       <form action="." method="POST">
         {% csrf_token %}
-        {% if error %}
-        <p style="color:red">{{ error }}</p>
-        {% endif %}
-        <div style="margin-top:10px"><input type="text" name="username" placeholder="username" />
-        </div>
-        <div style="margin-top:10px"><input type="password" name="password" placeholder="password" />
-        </div>
+        {{ form.as_p }}
+<!--        {% if error %}-->
+<!--        <p style="color:red">{{ error }}</p>-->
+<!--        {% endif %}-->
+<!--        <div style="margin-top:10px"><input type="text" name="username" placeholder="username" />-->
+<!--        </div>-->
+<!--        <div style="margin-top:10px"><input type="password" name="password" placeholder="password" />-->
+<!--        </div>-->
+
         <button type="submit" >Login</button>
       </form>
       <p> Need an account? Please <a href="/register">Register</a></p>
