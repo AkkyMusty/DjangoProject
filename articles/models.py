@@ -1,6 +1,7 @@
 
 from django.db import models
 from django.db.models.signals import pre_save, post_save
+from django.urls import reverse
 from django.utils import timezone
 from django.utils.text import slugify
 
@@ -15,6 +16,9 @@ class Article(models.Model):
     updated = models.DateTimeField(auto_now=True)
     publish = models.DateField(auto_now=False, auto_now_add=False, null=True, blank=True) # default=timezone.now null=True, blank=True  to make the fields nullable and blank when inputting data
     
+    def get_absolute_url(self):
+        # return f'/articles/{self.slug}/'
+        return reverse("article-detail", kwargs={"slug": self.slug})
 
     def save(self, *args, **kwargs):
         # if self.slug is None:

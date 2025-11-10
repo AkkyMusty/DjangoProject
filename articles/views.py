@@ -1,4 +1,5 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from django.http import Http404
 from django.contrib.auth.decorators import login_required
 
 from .models import Article
@@ -56,6 +57,7 @@ def article_create_view(request):
     if form.is_valid():
         article_object = form.save()
         context['form'] = ArticleForm()
+        return redirect(article_object.get_absolute_url())
 
         # title = form.cleaned_data.get('title')
         # content = form.cleaned_data.get('content')
@@ -66,11 +68,17 @@ def article_create_view(request):
 
     return render(request, "articles/create.html", context=context)
 
-def article_detail_view(request, id=None):
+def article_detail_view(request, slug=None):
     article_obj = None
-    if id is not None:
-        article_obj = Article.objects.get(id=id)
-
+    if slug is not None:
+        try:
+            article_obj = Article.objects.get(slug=slug)
+        except Article.DoesNotExist:
+            raise Http404
+        except Article.MultipleObjectsReturned:
+            article_obj = Article.objects.filter(slug=slug).first()
+        except:
+            raise Http404
     context = {
         "object": article_obj,
     }
